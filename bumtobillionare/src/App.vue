@@ -1,28 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Bum to Billionaire App</h1>
+    <div v-if="users.length">
+      <h2>Leaderboard</h2>
+      <ul>
+        <li v-for="(user, index) in users" :key="index">
+          {{ index + 1 }}. {{ user.username }} - {{ user.score }}
+        </li>
+      </ul>
+    </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      users: [],
+    };
+  },
+  mounted() {
+    this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        const response = await this.$axios.get('http://localhost:5000/users');
+        this.users = response.data;
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    },
+  },
+};
 </script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
 </style>
+  
