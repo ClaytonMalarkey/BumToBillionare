@@ -56,5 +56,7 @@ def get_users():
     return jsonify([{'username': user.username, 'score': user.score} for user in users])
 
 if __name__ == '__main__':
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
+
